@@ -39,12 +39,13 @@ Handles metrics and insights with focus on:
 
 **Diagram presenting the overall architecture:**
 ![System Architecture Overview](resources/Sys%20Arch.png)
+[System Architecture Mermaid Link](https://www.mermaidchart.com/raw/84582e11-2c7b-4752-82d3-c6b67cd64e20?theme=light&version=v0.1&format=svg)
 
 ## 3. Data Architecture
 
 ### 3.1 Database Strategy
 ![Data Flow](resources/Data%20Flow.png)
-
+[Data Flow Mermaid Chart](https://www.mermaidchart.com/raw/ee855b40-9d0a-43f2-beeb-a730ac7489c2?theme=light&version=v0.1&format=svg)
 
 ### 3.2 Caching Strategy
 
