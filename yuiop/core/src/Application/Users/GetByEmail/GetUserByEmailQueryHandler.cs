@@ -24,10 +24,14 @@ internal sealed class GetUserByEmailQueryHandler(IApplicationDbContext context, 
             .SingleOrDefaultAsync(cancellationToken);
 
         if (user is null)
+        {
             return Result.Failure<UserResponse>(UserErrors.NotFoundByEmail);
+        }
 
         if (user.Id != userContext.UserId)
+        {
             return Result.Failure<UserResponse>(UserErrors.Unauthorized());
+        }
 
         return user;
     }

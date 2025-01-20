@@ -54,5 +54,5 @@ await app.RunAsync();
 // REMARK: Required for functional and integration tests to work.
 namespace Web.Api
 {
-    public class Program;
+    public partial class Program;
 }

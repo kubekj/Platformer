@@ -19,10 +19,14 @@ internal sealed class CompleteTodoCommandHandler(
             .SingleOrDefaultAsync(t => t.Id == command.TodoItemId && t.UserId == userContext.UserId, cancellationToken);
 
         if (todoItem is null)
+        {
             return Result.Failure(TodoItemErrors.NotFound(command.TodoItemId));
+        }
 
         if (todoItem.IsCompleted)
+        {
             return Result.Failure(TodoItemErrors.AlreadyCompleted(command.TodoItemId));
+        }
 
         todoItem.IsCompleted = true;
         todoItem.CompletedAt = dateTimeProvider.UtcNow;

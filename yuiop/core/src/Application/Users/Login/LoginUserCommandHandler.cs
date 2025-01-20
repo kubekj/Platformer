@@ -19,12 +19,16 @@ internal sealed class LoginUserCommandHandler(
             .SingleOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
 
         if (user is null)
+        {
             return Result.Failure<string>(UserErrors.NotFoundByEmail);
+        }
 
         bool verified = passwordHasher.Verify(command.Password, user.PasswordHash);
 
         if (!verified)
+        {
             return Result.Failure<string>(UserErrors.NotFoundByEmail);
+        }
 
         string token = tokenProvider.Create(user);
 

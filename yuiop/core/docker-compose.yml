@@ -13,7 +13,7 @@ services:
     image: postgres:17
     container_name: postgres
     environment:
-      - POSTGRES_DB=yuiop-core
+      - POSTGRES_DB=clean-architecture
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:

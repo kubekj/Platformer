@@ -348,6 +348,9 @@ dotnet_diagnostic.CS8618.severity = none
 # IDE0005
 dotnet_diagnostic.IDE0005.severity = none
 
+# IDE0022L: This style rule concerns the use of expression bodies versus block bodies for methods.
+dotnet_diagnostic.IDE0022.severity = none
+
 # IDE0046: Convert to conditional expression
 dotnet_diagnostic.IDE0046.severity = none
 

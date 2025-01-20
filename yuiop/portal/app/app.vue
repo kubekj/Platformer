@@ -17,8 +17,8 @@ useHead({
   }
 })
 
-const title = 'Nuxt UI Pro - Dashboard template'
-const description = 'Nuxt UI Pro is a collection of premium Vue components built on top of Nuxt UI to create beautiful & responsive Nuxt applications in minutes.'
+const title = 'Yuiop'
+const description = 'Yuiop is a all-in-one SaaS for managing, creating and analysing experiences in minutes.'
 
 useSeoMeta({
   title,

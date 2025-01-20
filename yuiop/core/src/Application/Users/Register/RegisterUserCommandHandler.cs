@@ -13,7 +13,9 @@ internal sealed class RegisterUserCommandHandler(IApplicationDbContext context, 
     public async Task<Result<Guid>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         if (await context.Users.AnyAsync(u => u.Email == command.Email, cancellationToken))
+        {
             return Result.Failure<Guid>(UserErrors.EmailNotUnique);
+        }
 
         var user = new User
         {

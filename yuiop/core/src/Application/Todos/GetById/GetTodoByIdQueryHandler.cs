@@ -27,6 +27,11 @@ internal sealed class GetTodoByIdQueryHandler(IApplicationDbContext context, IUs
             })
             .SingleOrDefaultAsync(cancellationToken);
 
-        return todo ?? Result.Failure<TodoResponse>(TodoItemErrors.NotFound(query.TodoItemId));
+        if (todo is null)
+        {
+            return Result.Failure<TodoResponse>(TodoItemErrors.NotFound(query.TodoItemId));
+        }
+
+        return todo;
     }
 }

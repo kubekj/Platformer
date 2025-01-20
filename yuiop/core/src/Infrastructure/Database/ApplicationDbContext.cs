@@ -14,6 +14,13 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 
     public DbSet<TodoItem> TodoItems { get; set; }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        modelBuilder.HasDefaultSchema(Schemas.Default);
+    }
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         // When should you publish domain events?
@@ -33,13 +40,6 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
         return result;
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-
-        modelBuilder.HasDefaultSchema(Schemas.Default);
-    }
-
     private async Task PublishDomainEventsAsync()
     {
         var domainEvents = ChangeTracker
@@ -56,6 +56,8 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
             .ToList();
 
         foreach (IDomainEvent domainEvent in domainEvents)
+        {
             await publisher.Publish(domainEvent);
+        }
     }
 }
