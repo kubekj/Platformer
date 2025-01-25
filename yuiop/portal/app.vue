@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
-
 const color = computed(() => colorMode.value === 'dark' ? '#111827' : 'white')
 
 useHead({
@@ -17,28 +16,22 @@ useHead({
   }
 })
 
-const title = 'Yuiop'
-const description = 'Yuiop is a all-in-one SaaS for managing, creating and analysing experiences in minutes.'
-
+const title = 'Yuiop - Experience Management Platform'
+const description = 'Create and manage unique experiences with our comprehensive platform.'
 useSeoMeta({
   title,
   description,
   ogTitle: title,
-  ogDescription: description,
-  ogImage: 'https://dashboard-template.nuxt.dev/social-card.png',
-  twitterImage: 'https://dashboard-template.nuxt.dev/social-card.png',
-  twitterCard: 'summary_large_image'
+  ogDescription: description
 })
 </script>
 
 <template>
   <div>
     <NuxtLoadingIndicator />
-
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-
     <UNotifications />
     <UModals />
   </div>

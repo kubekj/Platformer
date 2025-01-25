@@ -5,12 +5,11 @@ Experience Frontend (nuxt) &lt;-> Experience Service (dotnet) &lt;-> Analytics S
 ```
 Platformer/
 ├── yuiop/
-│   ├── webapp/        # Nuxt frontend
-│   ├── experience/    # Dotnet experience service
-│   └── analytics/     # Python analytics service
+│   ├── portal/        # Nuxt frontend
+│   ├── core/          # Dotnet experience
+│   └── insights/      # Python analytics service
 ├── tools/
 │   ├── scripts/
-│   └── ci/
 └── docs/
     └── architecture/
 ```
