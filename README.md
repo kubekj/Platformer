@@ -24,3 +24,24 @@ Platformer/
 ├── README.md
 └── .gitignore
 ```
+
+
+## Technology Stack
+
+- **Frontend:**
+  - Nuxt.js
+  - TypeScript
+  - Tailwind CSS
+  - Vite
+
+- **Backend:**
+  - FastAPI
+  - PostgreSQL
+  - SQLAlchemy
+  - Pydantic
+
+- **Infrastructure:**
+  - Docker
+  - Docker Compose
+  - GitHub Actions
+  - Traefik

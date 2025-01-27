@@ -1,24 +1,30 @@
-# Please see the documentation for all configuration options if needed:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "yuiop/portal" 
+  # GitHub Actions
+  - package-ecosystem: github-actions
+    directory: yuiop/
     schedule:
-      interval: "weekly"
-      
-  - package-ecosystem: "nuget"
-    directory: "yuiop/core" 
+      interval: weekly
+    commit-message:
+      prefix: ⬆
+  # Python
+  - package-ecosystem: pip
+    directory: yuiop/core
     schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "dotnet-sdk"
-    directory: "yuiop/core" 
+      interval: weekly
+    commit-message:
+      prefix: ⬆
+  # Docker
+  - package-ecosystem: docker
+    directory: yuiop/
     schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "docker"
-    directory: "/"
+      interval: weekly
+    commit-message:
+      prefix: ⬆
+  # Node
+  - package-ecosystem: npm
+    directory: yuiop/portal
     schedule:
-      interval: "weekly"
+      interval: weekly
+    commit-message:
+      prefix: ⬆
