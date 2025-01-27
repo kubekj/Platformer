@@ -11,18 +11,23 @@ Yuiop is a modern SaaS platform for experience creation, management, and deliver
 
 ## Folder structure
 ```
-Platformer/
-├── yuiop/
-│   ├── portal/        # UI (Nuxt frontend)
-│   ├── core/          # Python experience backend (FastAPI)
-│   └── analytics/     # Python analytics microservice (FastAPI) [for future AI/ML service]
-├── tools/
-│   ├── scripts/
-├── docs/
-│    └── architecture/
-├── docker-compose.yml
-├── README.md
-└── .gitignore
+Platformmer/
+├── .github/                 # GitHub specific configurations
+│   └── workflows/           # CI/CD pipeline definitions
+├── docs/                    # Centralized documentation
+│   ├── resources/           # Documentation resources
+│   ├── api.md               # API documentation
+│   ├── architecture.md      # System architecture
+│   ├── deployment.md        # Deployment guides
+│   └── development.md       # Development setup
+├── scripts/                 # Shared automation scripts
+│   ├── build.sh             # Build scripts
+│   ├── deploy.sh            # Deployment scripts
+│   └── test.sh              # Testing scripts
+└── yuiop/                   # Main application code
+    ├── core/                # Backend (FastAPI)
+    ├── portal/              # Frontend (Nuxt)
+    └── docker-compose.yml   # Container orchestration
 ```
 
 
