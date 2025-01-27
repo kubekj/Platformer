@@ -18,6 +18,7 @@ useHead({
 
 const title = 'Yuiop - Experience Management Platform'
 const description = 'Create and manage unique experiences with our comprehensive platform.'
+
 useSeoMeta({
   title,
   description,

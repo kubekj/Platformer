@@ -83,9 +83,6 @@
       "public": [
         "../public"
       ],
-      "public/*": [
-        "../public/*"
-      ],
       "#app": [
         "../node_modules/nuxt/dist/app"
       ],
@@ -120,7 +117,7 @@
         "./tailwind/expose/*"
       ],
       "#app-manifest": [
-        "./manifest/meta/4913cccf-17fa-4594-8802-ed68fc9b8784"
+        "./manifest/meta/dev.json"
       ],
       "#components": [
         "./components"
