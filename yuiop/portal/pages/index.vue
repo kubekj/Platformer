@@ -1,36 +1,78 @@
 <script setup lang="ts">
-import type { Experience } from '~/types'
+import type { Experience } from "~/types";
 
 definePageMeta({
-  layout: 'default'
-})
+  layout: "default",
+});
 
 // Experience statistics
 const stats = reactive({
   totalExperiences: 12,
   activeExperiences: 8,
   averageRating: 4.8,
-  monthlyBookings: 156
-})
+  monthlyBookings: 156,
+});
 
 // Mock data - In production, this would come from an API
 const recentExperiences = ref<Experience[]>([
   {
-    id: '1',
-    title: 'City Walking Tour',
-    description: 'Experience the city like a local',
-    language: 'en',
-    inclusions: ['Guide', 'Map', 'Refreshments'],
-    status: 'published',
-    createdAt: '2024-01-20T10:00:00Z',
-    updatedAt: '2024-01-20T10:00:00Z'
-  }
-])
+    id: "1",
+    title: "City Walking Tour",
+    description: "Experience the city like a local",
+    language: "en",
+    inclusions: ["Guide", "Map", "Refreshments"],
+    status: "published",
+    createdAt: "2024-01-20T10:00:00Z",
+    updatedAt: "2024-01-20T10:00:00Z",
+  },
+]);
 
-const { data: experiences } = await useAsyncData('experiences', () => {
+const { data: experiences } = await useAsyncData("experiences", () => {
   // In production: return queryClient.experiences.list()
-  return Promise.resolve(recentExperiences.value)
-})
+  return Promise.resolve(recentExperiences.value);
+});
+
+// Utility functions
+function getStatIcon(key: string): string {
+  const iconMap: Record<string, string> = {
+    totalExperiences: "i-heroicons-book-open",
+    activeExperiences: "i-heroicons-sparkles",
+    averageRating: "i-heroicons-star",
+    monthlyBookings: "i-heroicons-calendar",
+  };
+  return iconMap[key] || "i-heroicons-question-mark-circle";
+}
+
+function formatStatLabel(key: string): string {
+  return key
+    .replace(/([A-Z])/g, " $1")
+    .toLowerCase()
+    .replace(/^\w/, (c) => c.toUpperCase());
+}
+
+function formatStatValue(key: string, value: number): string {
+  if (key === "averageRating") return value.toFixed(1);
+  return value.toLocaleString();
+}
+
+function getStatusColor(
+  status: string
+): "gray" | "red" | "green" | "yellow" | "blue" | "purple" | "pink" | "orange" {
+  const colorMap: Record<string, "gray" | "red" | "green"> = {
+    published: "green",
+    draft: "gray",
+    archived: "red",
+  };
+  return colorMap[status] || "gray";
+}
+
+function formatDate(date: string): string {
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
 </script>
 
 <template>
@@ -65,6 +107,11 @@ const { data: experiences } = await useAsyncData('experiences', () => {
       </UCard>
     </div>
 
+    <!-- Charts -->
+    <div class="mb-8">
+      <DashboardCharts />
+    </div>
+
     <!-- Recent Experiences -->
     <UCard>
       <template #header>
@@ -84,7 +131,7 @@ const { data: experiences } = await useAsyncData('experiences', () => {
       </template>
 
       <UTable
-        :rows="experiences"
+        :rows="experiences ?? []"
         :columns="[
           {
             key: 'title',
@@ -97,7 +144,7 @@ const { data: experiences } = await useAsyncData('experiences', () => {
           {
             key: 'createdAt',
             label: 'Created',
-          }
+          },
         ]"
       >
         <template #status-data="{ row }">
@@ -116,45 +163,3 @@ const { data: experiences } = await useAsyncData('experiences', () => {
     </UCard>
   </div>
 </template>
-
-<script lang="ts">
-// Utility functions
-function getStatIcon(key: string): string {
-  const iconMap: Record<string, string> = {
-    totalExperiences: 'i-heroicons-book-open',
-    activeExperiences: 'i-heroicons-sparkles',
-    averageRating: 'i-heroicons-star',
-    monthlyBookings: 'i-heroicons-calendar'
-  }
-  return iconMap[key] || 'i-heroicons-question-mark-circle'
-}
-
-function formatStatLabel(key: string): string {
-  return key
-    .replace(/([A-Z])/g, ' $1')
-    .toLowerCase()
-    .replace(/^\w/, c => c.toUpperCase())
-}
-
-function formatStatValue(key: string, value: number): string {
-  if (key === 'averageRating') return value.toFixed(1)
-  return value.toLocaleString()
-}
-
-function getStatusColor(status: string): string {
-  const colorMap: Record<string, string> = {
-    published: 'green',
-    draft: 'gray',
-    archived: 'red'
-  }
-  return colorMap[status] || 'gray'
-}
-
-function formatDate(date: string): string {
-  return new Date(date).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  })
-}
-</script>

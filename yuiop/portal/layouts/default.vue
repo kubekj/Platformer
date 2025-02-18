@@ -1,51 +1,51 @@
 <script setup lang="ts">
 interface NavigationLink {
-  label: string
-  icon: string
-  to: string
-  active?: boolean
+  label: string;
+  icon: string;
+  to: string;
+  active?: boolean;
 }
 
 const navigationLinks: NavigationLink[] = [
   {
-    label: 'Overview',
-    icon: 'i-heroicons-chart-bar',
-    to: '/',
+    label: "Overview",
+    icon: "i-heroicons-chart-bar",
+    to: "/",
   },
   {
-    label: 'Create',
-    icon: 'i-heroicons-sparkles',
-    to: '/create',
-    active: true
+    label: "Create",
+    icon: "i-heroicons-sparkles",
+    to: "/create",
+    active: true,
   },
   {
-    label: 'Bookings',
-    icon: 'i-heroicons-calendar',
-    to: '/bookings'
+    label: "Bookings",
+    icon: "i-heroicons-calendar",
+    to: "/bookings",
   },
   {
-    label: 'Publish',
-    icon: 'i-heroicons-paper-airplane',
-    to: '/publish'
+    label: "Publish",
+    icon: "i-heroicons-paper-airplane",
+    to: "/publish",
   },
   {
-    label: 'Analyze',
-    icon: 'i-heroicons-chart-pie',
-    to: '/analyze'
+    label: "Analyze",
+    icon: "i-heroicons-chart-pie",
+    to: "/analyze",
   },
   {
-    label: 'Calendar',
-    icon: 'i-heroicons-calendar-days',
-    to: '/calendar'
+    label: "Calendar",
+    icon: "i-heroicons-calendar-days",
+    to: "/calendar",
   },
   {
-    label: 'Settings',
-    icon: 'i-heroicons-cog-6-tooth',
-    to: '/settings'
-  }
-]
+    label: "Settings",
+    icon: "i-heroicons-cog-6-tooth",
+    to: "/settings",
+  },
+];
 
-const route = useRoute()
+const route = useRoute();
 </script>
 
 <template>
@@ -80,7 +80,9 @@ const route = useRoute()
               :to="link.to"
               :class="[
                 'w-full justify-start font-normal',
-                route.path === link.to ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/50 dark:text-primary-400' : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/50'
+                route.path === link.to
+                  ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/50 dark:text-primary-400'
+                  : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/50',
               ]"
               variant="ghost"
               size="sm"

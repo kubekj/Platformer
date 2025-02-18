@@ -2,5 +2,8 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxt/ui"],
-  compatibilityDate: "2025-01-23"
-})
+  compatibilityDate: "2025-02-09",
+  nitro: {
+    preset: "deno",
+  },
+});
