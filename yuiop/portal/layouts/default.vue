@@ -1,22 +1,17 @@
 <script setup lang="ts">
-interface NavigationLink {
-  label: string;
-  icon: string;
-  to: string;
-  active?: boolean;
-}
+import type { NavigationLink } from "~/types";
 
 const navigationLinks: NavigationLink[] = [
   {
     label: "Overview",
     icon: "i-heroicons-chart-bar",
     to: "/",
+    active: true,
   },
   {
     label: "Create",
     icon: "i-heroicons-sparkles",
     to: "/create",
-    active: true,
   },
   {
     label: "Bookings",

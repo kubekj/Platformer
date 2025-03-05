@@ -182,7 +182,6 @@
 </template>
 
 <script setup lang="ts">
-import { useExperienceStore } from "~/composables/useExperienceStore";
 import type { PricingOption, CancellationPolicy } from "~/types";
 
 const experienceStore = useExperienceStore();
