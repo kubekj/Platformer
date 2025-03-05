@@ -81,11 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import type {
-  ExperienceCategory,
-  ExperienceType,
-  NewExperienceForm,
-} from "~/types";
+import type { ExperienceCategory, ExperienceType } from "~/types";
 // Store is auto-imported
 
 const experienceStore = useExperienceStore();
