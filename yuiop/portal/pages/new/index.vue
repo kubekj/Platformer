@@ -18,87 +18,61 @@
           </div>
 
           <form @submit.prevent="handleSubmit">
-            <!-- Basic Information -->
-            <div class="space-y-12">
+            <!-- Step 1: Basic Information -->
+            <div v-if="currentStep === 1" class="space-y-12">
               <div class="border-b border-gray-200 dark:border-gray-800 pb-12">
-                <div class="flex justify-between items-center mb-6">
-                  <h2
-                    class="text-base font-semibold text-gray-900 dark:text-white"
-                  >
-                    Basic information
-                  </h2>
-                  <span class="text-sm text-gray-500">Step 1 of 4</span>
-                </div>
+                <BasicInfoForm />
+              </div>
+            </div>
 
-                <div class="grid grid-cols-2 gap-6">
-                  <UFormGroup class="col-span-2" label="Title" required>
-                    <UInput
-                      v-model="form.title"
-                      placeholder="Enter a clear name for your experience"
-                    />
-                  </UFormGroup>
+            <!-- Step 2: Details & Schedule -->
+            <div v-else-if="currentStep === 2" class="space-y-12">
+              <div class="border-b border-gray-200 dark:border-gray-800 pb-12">
+                <DetailsScheduleForm />
+              </div>
+            </div>
 
-                  <UFormGroup class="col-span-2" label="Category" required>
-                    <USelect
-                      v-model="form.category"
-                      :options="categories"
-                      option-attribute="name"
-                      placeholder="Select category"
-                    />
-                  </UFormGroup>
+            <!-- Step 3: Pricing -->
+            <div v-else-if="currentStep === 3" class="space-y-12">
+              <div class="border-b border-gray-200 dark:border-gray-800 pb-12">
+                <PricingForm />
+              </div>
+            </div>
 
-                  <UFormGroup class="col-span-2" label="Description" required>
-                    <UTextarea
-                      v-model="form.description"
-                      placeholder="Provide a detailed description of your experience"
-                      :rows="4"
-                    />
-                  </UFormGroup>
-
-                  <UFormGroup class="col-span-2" label="Language" required>
-                    <USelect
-                      v-model="form.language"
-                      :options="languages"
-                      placeholder="Select language"
-                    />
-                  </UFormGroup>
-
-                  <UFormGroup class="col-span-2" label="Type" required>
-                    <URadioGroup
-                      v-model="form.type"
-                      :options="types"
-                      option-attribute="name"
-                      class="grid grid-cols-3 gap-4"
-                    >
-                      <template #option="{ option }">
-                        <div
-                          class="p-4 border rounded-lg hover:border-primary-500 cursor-pointer"
-                          :class="[
-                            form.type === option.value
-                              ? 'border-primary-500 bg-primary-50 dark:bg-primary-950'
-                              : 'border-gray-200 dark:border-gray-800',
-                          ]"
-                        >
-                          <div
-                            class="font-medium text-gray-900 dark:text-white"
-                          >
-                            {{ option.name }}
-                          </div>
-                          <p class="mt-1 text-sm text-gray-500">
-                            {{ option.description }}
-                          </p>
-                        </div>
-                      </template>
-                    </URadioGroup>
-                  </UFormGroup>
-                </div>
+            <!-- Step 4: Media & Preview -->
+            <div v-else-if="currentStep === 4" class="space-y-12">
+              <div class="pb-12">
+                <MediaPreviewForm />
               </div>
             </div>
 
             <!-- Form Actions -->
             <div class="mt-6 flex items-center justify-end gap-x-6">
-              <UButton color="gray" variant="ghost" to="/">Cancel</UButton>
-              <UButton type="submit" color="primary">Next step</UButton>
+              <UButton
+                v-if="currentStep > 1"
+                color="gray"
+                variant="ghost"
+                @click="prevStep"
+              >
+                Back
+              </UButton>
+              <UButton
+                v-if="currentStep < totalSteps"
+                type="button"
+                color="primary"
+                :disabled="!canProceed"
+                @click="nextStep"
+              >
+                Next step
+              </UButton>
+              <UButton
+                v-else
+                type="submit"
+                color="primary"
+                :loading="isSubmitting"
+              >
+                Create Experience
+              </UButton>
             </div>
           </form>
         </div>
@@ -122,6 +96,7 @@
                 v-for="step in steps"
                 :key="step.id"
                 class="group flex items-center w-full"
+                @click="goToStep(step.id)"
               >
                 <!-- Circle with number -->
                 <span
@@ -129,10 +104,17 @@
                     'relative z-10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full',
                     step.status === 'current'
                       ? 'bg-primary-500 text-white ring-8 ring-primary-50 dark:ring-primary-950'
+                      : step.status === 'completed'
+                      ? 'bg-green-500 text-white'
                       : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400',
                   ]"
                 >
-                  {{ step.id }}
+                  <UIcon
+                    v-if="step.status === 'completed'"
+                    name="i-heroicons-check"
+                    class="h-5 w-5"
+                  />
+                  <span v-else>{{ step.id }}</span>
                 </span>
                 <!-- Step text -->
                 <div class="ml-4 min-w-0">
@@ -141,6 +123,8 @@
                       'text-sm font-medium',
                       step.status === 'current'
                         ? 'text-primary-500'
+                        : step.status === 'completed'
+                        ? 'text-green-500'
                         : 'text-gray-500 dark:text-gray-400',
                     ]"
                   >
@@ -157,62 +141,109 @@
 </template>
 
 <script setup lang="ts">
-import type {
-  ExperienceCategory,
-  ExperienceType,
-  Step,
-  NewExperienceForm,
-} from "~/types";
+// Store is auto-imported via the Pinia Nuxt module configuration
+import type { Step } from "~/types";
+import BasicInfoForm from "~/components/experience/BasicInfoForm.vue";
+import DetailsScheduleForm from "~/components/experience/DetailsScheduleForm.vue";
+import PricingForm from "~/components/experience/PricingForm.vue";
+import MediaPreviewForm from "~/components/experience/MediaPreviewForm.vue";
 
-const form = reactive<NewExperienceForm>({
-  title: "",
-  description: "",
-  category: undefined, // Changed from null to undefined
-  type: undefined, // Changed from null to undefined
-  language: undefined, // Changed from null to undefined
+// Ensure we have access to useToast for notifications
+const toast = useToast();
+
+const experienceStore = useExperienceStore();
+const { currentStep, totalSteps, stepValidation, form } =
+  storeToRefs(experienceStore);
+const { nextStep, prevStep, goToStep, submitExperience } = experienceStore;
+
+// Submission state
+const isSubmitting = ref(false);
+
+// Determine if we can proceed to the next step
+const canProceed = computed(() => {
+  if (currentStep.value === 1) {
+    return stepValidation.value.step1;
+  }
+
+  // For other steps, we could be more permissive
+  return true;
 });
 
-const categories: ExperienceCategory[] = [
-  { name: "Adventure", value: "adventure" },
-  { name: "Culture", value: "culture" },
-  { name: "Food & Drink", value: "food-drink" },
-  { name: "Nature", value: "nature" },
-  { name: "Sports", value: "sports" },
-];
+// Steps configuration
+const steps = computed(
+  () =>
+    [
+      {
+        id: 1,
+        name: "Basic Information",
+        status:
+          currentStep.value === 1
+            ? "current"
+            : currentStep.value > 1
+            ? "completed"
+            : "upcoming",
+      },
+      {
+        id: 2,
+        name: "Details & Schedule",
+        status:
+          currentStep.value === 2
+            ? "current"
+            : currentStep.value > 2
+            ? "completed"
+            : "upcoming",
+      },
+      {
+        id: 3,
+        name: "Pricing",
+        status:
+          currentStep.value === 3
+            ? "current"
+            : currentStep.value > 3
+            ? "completed"
+            : "upcoming",
+      },
+      {
+        id: 4,
+        name: "Preview & Publish",
+        status: currentStep.value === 4 ? "current" : "upcoming",
+      },
+    ] as Step[]
+);
 
-const types: ExperienceType[] = [
-  {
-    name: "One-time",
-    value: "one-time",
-    description: "A single occurrence event",
-  },
-  {
-    name: "Recurring",
-    value: "recurring",
-    description: "Repeats on a schedule",
-  },
-  {
-    name: "On-demand",
-    value: "on-demand",
-    description: "Available anytime",
-  },
-];
+async function handleSubmit() {
+  isSubmitting.value = true;
 
-const languages = [
-  { label: "English", value: "en" },
-  { label: "Spanish", value: "es" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-];
+  try {
+    const result = await submitExperience();
 
-const steps: Step[] = [
-  { id: 1, name: "Basic Information", status: "current" },
-  { id: 2, name: "Details & Schedule", status: "upcoming" },
-  { id: 3, name: "Pricing", status: "upcoming" },
-  { id: 4, name: "Preview & Publish", status: "upcoming" },
-];
+    // Show success notification
+    const toast = useToast();
+    toast.add({
+      title: "Experience Created",
+      description: `"${result.title}" has been created successfully.`,
+      icon: "i-heroicons-check-circle",
+      color: "green",
+      timeout: 5000,
+    });
 
-const handleSubmit = () => {
-  console.log(form);
-};
+    // Redirect to the experiences page
+    await navigateTo("/bookings");
+  } catch (error) {
+    console.error("Failed to create experience:", error);
+
+    // Show error notification
+    const toast = useToast();
+    toast.add({
+      title: "Creation Failed",
+      description:
+        "There was an error creating your experience. Please try again.",
+      icon: "i-heroicons-exclamation-triangle",
+      color: "red",
+      timeout: 5000,
+    });
+  } finally {
+    isSubmitting.value = false;
+  }
+}
 </script>
