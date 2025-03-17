@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.7.0",
-    "@nuxt/ui": "^2.21.0",
+    "@nuxt/ui": "^3.0.0",
     "chart.js": "^4.4.1",
     "nuxt": "^3.6.0",
     "vite-plugin-vue-tracer": "^0.1.0",
